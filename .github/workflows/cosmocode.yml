@@ -9,7 +9,7 @@ on:
         type: choice
         options:
           - all
-          - tests/cosmocode.spec.js
+          - cosmocode.spec.js
 jobs:
   build:
     runs-on: ubuntu-latest
