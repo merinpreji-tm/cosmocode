@@ -8,8 +8,11 @@ on:
         default: 'all'
         type: choice
         options:
-          - all
           - cosmocode.spec.js
+      url:
+        description: 'Enter encoded URL'
+        required: true
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,9 +30,9 @@ jobs:
           npx wdio run ./wdio.conf.js --spec ${{ github.event.inputs.testFile }}
       - name: Install encode-decode-data
         run: npm install -g encode-decode-data
-      - name: Encode URL and Display
+      - name: Decode URL and Display
         run: |
-          url="https://cosmocode.io/automation-practice-webtable/"
-          encoded_url=$(enc-dec enc "$url" -s hex)
-          echo "Encoded URL: $encoded_url" >> $GITHUB_STEP_SUMMARY
+          url="${{ github.event.inputs.url }}"
+          decoded_url=$(enc-dec dec $url -s hex)
+          echo "Decoded URL: $decoded_url" >> $GITHUB_STEP_SUMMARY
         shell: bash
