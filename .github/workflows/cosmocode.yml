@@ -1,0 +1,34 @@
+name: CosmoCode
+on:
+  workflow_dispatch:
+    inputs:
+      testFile:
+        description: 'Select test file to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - tests/cosmocode.spec.js
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Selected Test
+        run: |
+          npx wdio run ./wdio.conf.js --spec "${{ github.event.inputs.testFile }}"
+      - name: Summary
+        run: |
+          echo "### CosmoCode Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: $GITHUB_REF_NAME" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: $GITHUB_SHA" >> $GITHUB_STEP_SUMMARY
+          echo "- Actor: $GITHUB_ACTOR" >> $GITHUB_STEP_SUMMARY
+          echo "URL: https://cosmocode.io/automation-practice-webtable/" >> $GITHUB_STEP_SUMMARY
