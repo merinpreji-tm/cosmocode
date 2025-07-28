@@ -27,8 +27,11 @@ jobs:
           npx wdio run ./wdio.conf.js --spec ${{ github.event.inputs.testFile }}
       - name: Summary
         run: |
+          npm install encoding
+          ENCODED_URL=$(node -e "
+            const encoding = require('encoding');
+            const text = 'https://cosmocode.io/automation-practice-webtable/';
+            const resultBuffer = encoding.convert(text, 'ISO-8859-1');
+          ")
           echo "### CosmoCode Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- Branch: $GITHUB_REF_NAME" >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: $GITHUB_SHA" >> $GITHUB_STEP_SUMMARY
-          echo "- Actor: $GITHUB_ACTOR" >> $GITHUB_STEP_SUMMARY
-          echo "URL: https://cosmocode.io/automation-practice-webtable/" >> $GITHUB_STEP_SUMMARY
+          echo "Encoded URL: $ENCODED_URL" >> $GITHUB_STEP_SUMMARY
