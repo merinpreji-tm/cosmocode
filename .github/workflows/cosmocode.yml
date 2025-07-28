@@ -28,10 +28,12 @@ jobs:
       - name: Summary
         run: |
           npm install encoding
-          ENCODED_URL=$(node -e "
-            const encoding = require('encoding');
-            const text = 'https://cosmocode.io/automation-practice-webtable/';
-            const resultBuffer = encoding.convert(text, 'ISO-8859-1');
-          ")
+          ENCODED_URL=$(node <<'EOF'
+          const encoding = require('encoding');
+          const text = 'https://cosmocode.io/automation-practice-webtable/';
+          const resultBuffer = encoding.convert(text, 'ISO-8859-1');
+          console.log(resultBuffer.toString());
+          EOF
+          )
           echo "### CosmoCode Summary" >> $GITHUB_STEP_SUMMARY
           echo "Encoded URL: $ENCODED_URL" >> $GITHUB_STEP_SUMMARY
