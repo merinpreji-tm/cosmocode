@@ -1,0 +1,38 @@
+name: CosmoCode
+on:
+  workflow_dispatch:
+    inputs:
+      testFile:
+        description: 'Select test file to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - cosmocode.spec.js
+      url:
+        description: 'Enter encoded URL'
+        required: true
+        type: string
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Selected Test
+        run: |
+          npx wdio run ./wdio.conf.js --spec ${{ github.event.inputs.testFile }}
+      - name: Install encode-decode-data
+        run: npm install -g encode-decode-data
+      - name: Decode URL and Display
+        run: |
+          url="${{ github.event.inputs.url }}"
+          decoded_url=$(enc-dec dec $url -s hex)
+          echo "Decoded URL: $decoded_url" >> $GITHUB_STEP_SUMMARY
+        shell: bash
