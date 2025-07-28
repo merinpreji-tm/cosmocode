@@ -25,15 +25,8 @@ jobs:
       - name: Run Selected Test
         run: |
           npx wdio run ./wdio.conf.js --spec ${{ github.event.inputs.testFile }}
-      - name: Summary
+      - name: Encode URL
         run: |
-          npm install encoding
-          ENCODED_URL=$(node <<'EOF'
-          const encoding = require('encoding');
-          const text = 'https://cosmocode.io/automation-practice-webtable/';
-          const resultBuffer = encoding.convert(text, 'ISO-8859-1');
-          console.log(resultBuffer.toString());
-          EOF
-          )
-          echo "### CosmoCode Summary" >> $GITHUB_STEP_SUMMARY
+          npm install urlencode
+          ENCODED_URL=$(node -e "import urlencode from 'urlencode'; console.log(urlencode('https://cosmocode.io/automation-practice-webtable/', 'hex'))")
           echo "Encoded URL: $ENCODED_URL" >> $GITHUB_STEP_SUMMARY
