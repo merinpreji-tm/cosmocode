@@ -27,9 +27,10 @@ jobs:
           npx wdio run ./wdio.conf.js --spec ${{ github.event.inputs.testFile }}
       - name: Install encode-decode-data
         run: npm install -g encode-decode-data
-      - name: Encode URL and Display
+      - name: Display encoded url
         run: |
-          url="https://cosmocode.io/automation-practice-webtable/"
+          url=$(node -e "console.log(require('./test/testData/testData.json').url)")
           encoded_url=$(enc-dec enc "$url" -s hex)
-          echo "Encoded URL: $encoded_url" >> $GITHUB_STEP_SUMMARY
+          echo "### Encoded Data Summary" >> $GITHUB_STEP_SUMMARY
+          echo "URL: $encoded_url" >> $GITHUB_STEP_SUMMARY
         shell: bash
