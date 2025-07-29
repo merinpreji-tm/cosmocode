@@ -39,6 +39,11 @@ class WebtablesPage {
         await this.getData();
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet(worksheetTitle);
+
+        const dir = 'test/.artifacts';
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
         const headerRow = worksheet.addRow(this.tableHeadings.map(h => h.title));
         headerRow.eachCell((cell) => {
             cell.font = { bold: true };
