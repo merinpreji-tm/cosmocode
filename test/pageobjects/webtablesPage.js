@@ -1,4 +1,5 @@
 import ExcelJS from "exceljs";
+import fs from 'fs';
 
 class WebtablesPage {
     constructor() {
@@ -41,9 +42,10 @@ class WebtablesPage {
         const worksheet = workbook.addWorksheet(worksheetTitle);
 
         const dir = 'test/.artifacts';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
+        if (fs.existsSync(dir)) {
+            fs.rmSync(dir, { recursive: true, force: true });
         }
+        fs.mkdirSync(dir, { recursive: true });
         const headerRow = worksheet.addRow(this.tableHeadings.map(h => h.title));
         headerRow.eachCell((cell) => {
             cell.font = { bold: true };
