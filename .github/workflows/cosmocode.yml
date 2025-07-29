@@ -1,15 +1,6 @@
-name: CosmoCode
+name: CosmoCode Webtable
 on:
   workflow_dispatch:
-    inputs:
-      testFile:
-        description: 'Select test file to run'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - cosmocode.spec.js
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,13 +15,18 @@ jobs:
         run: npm install
       - name: Run Selected Test
         run: |
-          npx wdio run ./wdio.conf.js --spec ${{ github.event.inputs.testFile }}
+          npx wdio run ./wdio.conf.js --spec webtable.spec.js
       - name: Install encode-decode-data
         run: npm install -g encode-decode-data
       - name: Display encoded url
         run: |
           url=$(node -e "console.log(require('./test/testData/testData.json').url)")
           encoded_url=$(enc-dec enc "$url" -s hex)
-          echo "### Encoded Data Summary" >> $GITHUB_STEP_SUMMARY
           echo "URL: $encoded_url" >> $GITHUB_STEP_SUMMARY
         shell: bash
+      - name: Upload Excel
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: excel file
+          path: test/.artifacts

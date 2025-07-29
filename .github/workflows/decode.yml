@@ -1,14 +1,7 @@
-name: CosmoCode
+name: CosmoCode Test
 on:
   workflow_dispatch:
     inputs:
-      testFile:
-        description: 'Select test file to run'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - cosmocode.spec.js
       url:
         description: 'Enter encoded URL'
         required: true
@@ -27,7 +20,7 @@ jobs:
         run: npm install
       - name: Run Selected Test
         run: |
-          npx wdio run ./wdio.conf.js --spec ${{ github.event.inputs.testFile }}
+          npx wdio run ./wdio.conf.js --spec cosmocode.spec.js
       - name: Install encode-decode-data
         run: npm install -g encode-decode-data
       - name: Decode URL and Display
