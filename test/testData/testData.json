@@ -1,4 +1,10 @@
 {
     "url": "https://cosmocode.io/automation-practice-webtable/",
-    "cosmocodeTitle": "Automation Practice | WebTable – CosmoCode (Formerly TeachMeSelenium)"
+    "titles": {
+        "cosmocodeTitle": "Automation Practice | WebTable – CosmoCode (Formerly TeachMeSelenium)"
+    },
+    "worksheet": {
+        "title": "Countries",
+        "filepath": "test/.artifacts/countries_data.xlsx"
+    }
 }
