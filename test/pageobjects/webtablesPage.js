@@ -22,7 +22,6 @@ class WebtablesPage {
     async getData() {
         const rows = await this.$$rows();
         this.tableData = [];
-
         for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
             let rowData = {};
             for (let columnIndex = 0; columnIndex < this.tableHeadings.length; columnIndex++) {
@@ -32,7 +31,6 @@ class WebtablesPage {
             }
             this.tableData.push(rowData);
         }
-        console.log(this.tableData);
     }
 
     async createExcelFile(worksheetTitle, filepath) {
@@ -42,10 +40,9 @@ class WebtablesPage {
         const worksheet = workbook.addWorksheet(worksheetTitle);
 
         const dir = 'test/.artifacts';
-        if (fs.existsSync(dir)) {
-            fs.rmSync(dir, { recursive: true, force: true });
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
         }
-        fs.mkdirSync(dir, { recursive: true });
         const headerRow = worksheet.addRow(this.tableHeadings.map(h => h.title));
         headerRow.eachCell((cell) => {
             cell.font = { bold: true };
