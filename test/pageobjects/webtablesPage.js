@@ -1,4 +1,5 @@
 import ExcelJS from "exceljs";
+import fs from 'fs';
 
 class WebtablesPage {
     constructor() {
@@ -21,7 +22,6 @@ class WebtablesPage {
     async getData() {
         const rows = await this.$$rows();
         this.tableData = [];
-
         for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
             let rowData = {};
             for (let columnIndex = 0; columnIndex < this.tableHeadings.length; columnIndex++) {
@@ -31,7 +31,6 @@ class WebtablesPage {
             }
             this.tableData.push(rowData);
         }
-        console.log(this.tableData);
     }
 
     async createExcelFile(worksheetTitle, filepath) {
@@ -39,6 +38,11 @@ class WebtablesPage {
         await this.getData();
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet(worksheetTitle);
+
+        const dir = 'test/.artifacts';
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
         const headerRow = worksheet.addRow(this.tableHeadings.map(h => h.title));
         headerRow.eachCell((cell) => {
             cell.font = { bold: true };
@@ -47,6 +51,23 @@ class WebtablesPage {
             worksheet.addRow(Object.values(row));
         });
         await workbook.xlsx.writeFile(filepath);
+    }
+
+    async verifyExcelData() {
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.readFile('test/.artifacts/countries_data.xlsx');
+        const worksheet = workbook.getWorksheet('Countries');
+
+        const excelData = [];
+        worksheet.eachRow((row, rowNumber) => {
+            if (rowNumber > 1) {
+                excelData.push(row.values.slice(1));
+            }
+        });
+        await this.getData();
+        const webData = this.tableData.map(row => Object.values(row));
+        const isDataMatching = JSON.stringify(excelData) === JSON.stringify(webData);
+        return isDataMatching;
     }
 }
 

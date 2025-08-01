@@ -1,9 +1,9 @@
-import testData from "../testData/testData.json";
+import testData from "../testData/cosmocode.json";
 import common from "../pageobjects/common";
 
 describe('Test the CosmoCode application', () => {
     it('Launch the landing page', async () => {
         await common.launchUrl(testData.url);
-        await expect(browser).toHaveTitle(testData.cosmocodeTitle);
+        await expect(browser).toHaveTitle(testData.titles.cosmocodeTitle);
     });
 });

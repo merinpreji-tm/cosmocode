@@ -1,0 +1,22 @@
+name: Excel Download and Report
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Dependencies
+        run: npm install
+      - name: Run WebdriverIO Tests
+        run: npx wdio run ./wdio.conf.js --spec excel.spec.js
+      - name: Upload Excel Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: downloaded-excel-file
+          path: downloads/*.xlsx
