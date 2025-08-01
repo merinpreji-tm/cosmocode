@@ -53,34 +53,15 @@ export const config = {
         browserName: 'chrome',
         'goog:chromeOptions': {
             args: [
-                '--headless=new',
-                '--disable-gpu',
-                '--disable-popup-blocking',
-                '--no-sandbox',
-                '--disable-dev-shm-usage',
-                '--safebrowsing-disable-download-protection'
-            ],
-            prefs: {
-                'download.default_directory': path.resolve(__dirname, './downloads'), // Auto-download to repo folder
-                'download.prompt_for_download': false,
-                'download.directory_upgrade': true,
-                'safebrowsing.enabled': true,
-                'profile.default_content_setting_values.automatic_downloads': 1
-            }
+            '--headless',
+            '--disable-gpu',
+            ]
         }
-
-        // browserName: 'chrome',
-        // 'goog:chromeOptions': {
-        //     args: [
-        //     '--headless',
-        //     '--disable-gpu',
-        //     ]
-        // }
-    },
-        // {
-        //     browserName: 'MicrosoftEdge'
-        // }
-    ],
+    }, 
+    // {
+    //     browserName: 'MicrosoftEdge'
+    // }
+],
 
     //
     // ===================
@@ -138,6 +119,7 @@ export const config = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'jasmine',
+    
     //
     // The number of times to retry the entire specfile when it fails as a whole
     // specFileRetries: 1,
@@ -161,7 +143,7 @@ export const config = {
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time
         // an assertion fails.
-        expectationResultHandler: function (passed, assertion) {
+        expectationResultHandler: function(passed, assertion) {
             // do something
         }
     },
@@ -179,14 +161,8 @@ export const config = {
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-    onPrepare: function () {
-        const downloadDir = path.resolve(__dirname, './downloads');
-        if (fs.existsSync(downloadDir)) {
-            fs.rmSync(downloadDir, { recursive: true, force: true });
-        }
-        fs.mkdirSync(downloadDir);
-        console.log(`Cleaned and recreated: ${downloadDir}`);
-    },
+    // onPrepare: function (config, capabilities) {
+    // },
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
      * for that worker as well as modify runtime environments in an async fashion.
