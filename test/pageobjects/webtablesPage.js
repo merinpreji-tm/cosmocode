@@ -52,6 +52,23 @@ class WebtablesPage {
         });
         await workbook.xlsx.writeFile(filepath);
     }
+
+    async verifyExcelData() {
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.readFile('test/.artifacts/countries_data.xlsx');
+        const worksheet = workbook.getWorksheet('Countries');
+
+        const excelData = [];
+        worksheet.eachRow((row, rowNumber) => {
+            if (rowNumber > 1) {
+                excelData.push(row.values.slice(1));
+            }
+        });
+        await this.getData();
+        const webData = this.tableData.map(row => Object.values(row));
+        const isDataMatching = JSON.stringify(excelData) === JSON.stringify(webData);
+        return isDataMatching;
+    }
 }
 
 export default new WebtablesPage();

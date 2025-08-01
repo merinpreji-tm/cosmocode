@@ -1,4 +1,4 @@
-import testData from "../testData/testData.json";
+import testData from "../testData/cosmocode.json";
 import common from "../pageobjects/common";
 
 describe('Test the CosmoCode application', () => {
