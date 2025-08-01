@@ -20,7 +20,7 @@ jobs:
         run: npm install -g encode-decode-data
       - name: Display encoded url
         run: |
-          url=$(node -e "console.log(require('./test/testData/testData.json').url)")
+          url=$(node -e "console.log(require('./test/testData/cosmocode.json').url)")
           encoded_url=$(enc-dec enc "$url" -s hex)
           echo "URL: $encoded_url" >> $GITHUB_STEP_SUMMARY
         shell: bash
